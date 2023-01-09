@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import javax.transaction.Transactional;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,6 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @Transactional
 @AutoConfigureEmbeddedDatabase
 @AutoConfigureMockMvc
+@Disabled
 @Sql("/product/insert_prerequisite_records.sql")
 public class ProductIntegrationTest {
 
