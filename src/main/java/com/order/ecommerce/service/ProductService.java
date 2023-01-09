@@ -7,7 +7,9 @@ import com.order.ecommerce.repository.IProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -51,7 +53,7 @@ public class ProductService implements IProductService {
         List<Product> productList = (List<Product>) productRepository.findAllById(ids);
         if (productList == null || productList.isEmpty()) {
             log.info("No product(s) found for ids = {}", ids);
-            return null;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No product(s) found for ids = " + ids);
         }
         log.info("Successfully found {} products", productList.size());
         return productList.stream().map(product -> productMapper.toProductDto(product)).collect(Collectors.toList());

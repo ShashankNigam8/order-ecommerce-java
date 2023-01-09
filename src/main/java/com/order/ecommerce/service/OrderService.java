@@ -13,7 +13,9 @@ import com.order.ecommerce.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -71,7 +73,7 @@ public class OrderService implements IOrderService {
         Optional<Order> order = orderRepository.findById(orderId);
         if (order.isEmpty()) {
             log.info("Cannot find order with id = {}", orderId);
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find order with id = " + orderId);
         }
 
         log.info("Successfully found order for orderId = {}", orderId);
@@ -87,7 +89,7 @@ public class OrderService implements IOrderService {
             return;
         }
 
-        List<OrderStatus> orderStatusList = Arrays.stream(OrderStatus.values()).filter(orderStatus -> orderStatus.toString().equalsIgnoreCase(status)).toList();
+        List<OrderStatus> orderStatusList = Arrays.stream(OrderStatus.values()).filter(orderStatus -> orderStatus.toString().equalsIgnoreCase(status)).collect(Collectors.toList());
         if (orderStatusList.isEmpty()) {
             log.error("Invalid status = {}, failed to update order status for id = {}", status, orderId);
             return;
